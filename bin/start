@@ -1,0 +1,149 @@
+#!/usr/bin/env node
+
+require('env2')('config.env');
+var http = require('http');
+var db = require('../storage/db');
+
+/**
+ * Setup database
+ */
+db.connect(process.env.NODE_APP_MONGO_URL)
+  .then(function() {
+    console.log('Connected to the database.');
+
+    setupLoggers();
+    var redisClient = createRedisClient();
+    var requestsLimiter = createRequestsLimiter();
+    var emailSender = createEmailSender();
+
+    setupApplication({
+      requestsLimiter: requestsLimiter,
+      emailSender: emailSender,
+      redisClient: redisClient
+    });
+  })
+  .catch(function(ex) {
+    var message = "Can't connect to the database. Details: " + ex.stack;
+    console.log(message);
+    throw message;
+  }
+);
+
+function setupLoggers() {
+  console.log('Setting up the logger');
+
+  var logger = require('../helpers/logger');
+  var Graylog = require('winston-graylog2');
+
+  logger.add(Graylog, {
+    name: 'Graylog',
+    silent: false,
+    handleExceptions: true,
+    graylog: {
+      servers: [{
+        host: process.env.NODE_APP_LOGAPP_URL,
+        port: process.env.NODE_APP_LOGAPP_PORT
+      }],
+      hostname: process.env.NODE_ENV,
+      facility: 'NodeApp',
+      bufferSize: 1400
+    }
+  });
+}
+
+function createRedisClient() {
+  console.log('Setting up Redis.');
+
+  var redis = require('redis');
+  var redisDecorator = require('../storage/redis');
+
+  var localRedis = redisDecorator(
+    redis.createClient(
+      process.env.NODE_APP_REDIS_PORT,
+      process.env.NODE_APP_REDIS_HOST
+      )
+  );
+
+  localRedis.on('error', function(err) {
+    console.log("Can't connect to Redis. Details:  " + err);
+  });
+
+  return localRedis;
+}
+
+function createRequestsLimiter() {
+  console.log('Setting up the requests limiter.');
+
+  var limiterConfig = require('../helpers/express-limiter');
+
+  return limiterConfig({
+    total: 50,
+    expire: 1000 * 60 * 60,
+    enabled: true
+  });
+}
+
+function createEmailSender() {
+  console.log('Setting up the email sender.');
+
+  var emailSenderConfig = require('../helpers/email-sender');
+  return emailSenderConfig({
+    service: 'Gmail',
+    auth: {
+      user: process.env.NODE_APP_EMAILSENDER_EMAIL,
+      pass: process.env.NODE_APP_EMAILSENDER_PASSWORD
+    }
+  });
+}
+
+function setupApplication(dependencies) {
+  console.log('Setting up the application');
+
+  app = require('../index')(dependencies);
+
+  var port = normalizePort(process.env.NODE_APP_PORT);
+  app.set('port', port);
+
+  var server = http.createServer(app);
+
+  server.listen(port);
+  server.on('error', onError);
+
+  function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+      return val;
+    }
+
+    if (port >= 0) {
+      return port;
+    }
+
+    return false;
+  }
+
+  function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+	"build_systems":
+	[
+		{
+			"name": "start",
+			"shell_cmd": "taskkill /F /IM node.exe & npm start"
+		},
+		{
+			"name": "debug",
+			"shell_cmd": "taskkill /F /IM node.exe & npm run debug"
+		},
+		{
+			"name": "kill",
+			"shell_cmd": "taskkill /F /IM node.exe"
+		},
+		{
+			"name": "test current file",
+			"shell_cmd": "taskkill /F /IM node.exe & npm test -- \"${file}\""
+		}
+	],
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns":
+			[
+				".git",
+				"node_modules",
+				"coverage"
+			]
+		}
+	]
+}

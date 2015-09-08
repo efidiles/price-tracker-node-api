@@ -1,0 +1,38 @@
+persistdata:
+  build: ./data
+
+graylog:
+  image: graylog2/allinone
+  hostname: graylog
+  mem_limit: 2048m
+  volumes_from:
+    - persistdata
+  volumes:
+    - "./graylog/data:/var/opt/graylog/data"
+    - "./graylog/log:/var/log/graylog"
+  ports:
+    - "9000:9000"
+    - "12201:12201/udp"
+  environment:
+    GRAYLOG_NODE_ID: fe305d54-7534-551b-ad32-eb2b9e546014
+    GRAYLOG_SERVER_SECRET: tr43r3s
+
+mongo:
+  image: mongo
+  hostname: mongo
+  volumes_from:
+    - persistdata
+  volumes:
+    - "./mongo/data:/data/db"
+  ports:
+    - "27017:27017"
+
+redis:
+  image: redis
+  hostname: redis
+  volumes_from:
+    - persistdata
+  volumes:
+    - "./redis/data:/data"
+  ports:
+    - "6379:6379"

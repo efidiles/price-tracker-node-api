@@ -1,0 +1,46 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/start",
+    "test": "istanbul cover node_modules/mocha/bin/_mocha",
+    "debug": "node-debug --no-preload ./bin/start",
+    "clear-db-test": "node test/utilities/clear-db.js",
+    "load-fixtures-test": "node test/utilities/load-fixtures.js"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^2.9.34",
+    "body-parser": "~1.13.2",
+    "compression": "^1.5.2",
+    "debug": "~2.2.0",
+    "env2": "^2.0.1",
+    "express": "~4.13.1",
+    "express-limiter": "^1.4.0",
+    "http-auth": "^2.2.8",
+    "jsonwebtoken": "^5.0.4",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "mongoose": "^4.1.0",
+    "nodemailer": "^1.4.0",
+    "redis": "^0.12.1",
+    "request": "^2.61.0",
+    "validator": "^4.0.5",
+    "winston": "^1.0.0",
+    "winston-graylog2": "^0.2.3"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "cheerio": "^0.19.0",
+    "istanbul": "^0.3.18",
+    "mocha": "^2.2.5",
+    "node-mocks-http": "^1.4.3",
+    "nodemon": "^1.4.1",
+    "sinon": "^1.16.1",
+    "supertest": "^1.0.1"
+  }
+}

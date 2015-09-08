@@ -13,7 +13,7 @@ function makeServer(dependencies) {
   var app = express();
 
   //DI - inject dependencies by extending the app.locals with instances
-  //received in the function
+  //received in the makeServer function
   _.assign(app.locals, dependencies);
 
   loadMiddlewares();

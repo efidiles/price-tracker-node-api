@@ -6,6 +6,14 @@ var utilities = require('./utilities');
 var logger = require('./logger').FIDI.forModule(__filename);
 var _ = require('lodash');
 
+/**
+ * Decorator for mongoose ItemModel. Given an ItemModel object, this decorator
+ * will perform certain async tasks detailed below.
+ * @param  {object} emailSender an emailSender instance must be injected when
+ *                              creating the decorator.
+ * @return {Promise}            which gets resolve when all the async operations
+ *                              are completed.
+ */
 module.exports = function(emailSender) {
   if (!emailSender) {
     throw new Error('An email sender instance is required.');
@@ -16,6 +24,11 @@ module.exports = function(emailSender) {
     this.content = null;
   }
 
+  /**
+   * Given an ItemModel, this method will fetch the content from the url in the
+   * url property.
+   * @return {Promise}
+   */
   ItemService.prototype.loadDataFromUrl = function() {
     logger.debug('Loading document from url: ' + this.item.url);
     return request.getAsync(this.item.url)
@@ -28,6 +41,11 @@ module.exports = function(emailSender) {
       });
   };
 
+  /**
+   * Given an ItemModel, this method will fetch and populate all the user
+   * details for users in the users property of the ItemModel object.
+   * @return {[type]} [description]
+   */
   ItemService.prototype.loadUsersFullInfo = function() {
     logger.debug('Loading users full info.');
     var ids = _.pluck(this.item.users, 'id');
@@ -50,6 +68,13 @@ module.exports = function(emailSender) {
     }
   };
 
+  /**
+   * Given the HTML content of a page, this function will grab the text content
+   * of the element matching the selector specified in ItemModel object's
+   * selector property, will create a new snapshot of the item and will save the
+   * item to the database.
+   * @return {Promise}
+   */
   ItemService.prototype.parseData = function() {
     if (!this.content) {
       throw new Error('The content is not available.');

@@ -4,6 +4,13 @@ var Promise = require('bluebird');
 var logger = require('./logger').FIDI.forModule(__filename);
 var senderTransport;
 
+/**
+ * Sends an activation email. Options parameters expects and email and
+ * a token to be set. The function will send an email with an activation url
+ * generated based on the token.
+ * @param  {object} options
+ * @return {Promise}
+ */
 function sendActivationEmail(options) {
   logger.debug('Sending activation email.');
 
@@ -22,7 +29,14 @@ function sendActivationEmail(options) {
 
   return senderTransport.sendMailAsync(mailOptions);
 }
-
+/**
+ * Sends an email to the user with the current price for an item (located at
+ * the specified url)
+ * @param  {string} email user's email
+ * @param  {string} url   item's URL
+ * @param  {float} price  item's price
+ * @return {Promise}
+ */
 function sendPriceNotification(email, url, price) {
   logger.debug('Sending price notification email.');
 
@@ -47,8 +61,7 @@ function createActivationLink(token) {
 
 module.exports = function(transporter) {
   if (!transporter) {
-    throw new Error('Please provide options for transporter in the ' +
-      'constructor.');
+    throw new Error('Please provide the config options for the transporter.');
   }
 
   senderTransport = Promise.promisifyAll(

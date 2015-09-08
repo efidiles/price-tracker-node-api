@@ -27,6 +27,13 @@ function login(req, res, next) {
     .then(checkPassword)
     .then(updateUserLastLogin)
     .then(setToken)
+    .then(function(token) {
+      logger.debug('Successfully logged in.');
+      res.FIDI.sendSuccess({
+        token: token
+      });
+      return next();
+    })
     .catch(function(ex) {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
@@ -59,17 +66,12 @@ function login(req, res, next) {
 
   function setToken(user) {
     logger.debug('Generating the token.');
-    var token = jwtHelper.generateToken(user.id, {
+
+    var tokenPayload = {
       ll: user.lastLogin,
       lpc: user.lastPasswordChange
-    });
-
-    logger.debug('Successfully logged in.');
-    res.FIDI.sendSuccess({
-      token: token
-    });
-
-    next();
+    };
+    return jwtHelper.generateToken(user.id, tokenPayload);
   }
 }
 

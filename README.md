@@ -27,3 +27,5 @@ The system is based on the following components:
 - Mocha/Istanbul/Chai(expect) for testing/code coverage/assertions
 - Bcrypt to encrypt sensitive data before storing in database
 - Implementation make heavy use of promises using bluebird library
+
+All the environment variables used by the app are specified in the `config.env.sample` file. This file should be renamed/duplicated to `config.env` and the application will default to the values in this file if the variables are not present in system's environment variables.

@@ -6,16 +6,16 @@ var Promise = require('bluebird');
  */
 
 var users = [
-  db.createUser({
-    _id: db.ObjectId('000000000000000000000001'),
-    email: "efidiles.public@gmail.com",
-    password: "test",
+  db.users.create({
+    _id: db.users.ObjectId('000000000000000000000001'),
+    email: 'efidiles.public@gmail.com',
+    password: 'test',
     activated: true
   }),
-  db.createUser({
+  db.users.create({
     _id: db.ObjectId('000000000000000000000002'),
-    email: "test1@example.org",
-    password: "test",
+    email: 'test1@example.org',
+    password: 'test',
     activated: true
   })
 ];

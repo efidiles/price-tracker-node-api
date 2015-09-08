@@ -92,7 +92,7 @@ function remove(req, res, next) {
 
   db.items.getById(req.body.id)
     .then(checkItem)
-    .then(db.items.removeUser.bind(
+    .then(db.items.remove.bind(
       null,
       req.body.id,
       req.FIDI.token.decoded.iss

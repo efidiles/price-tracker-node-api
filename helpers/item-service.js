@@ -32,7 +32,7 @@ module.exports = function(emailSender) {
     logger.debug('Loading users full info.');
     var ids = _.pluck(this.item.users, 'id');
 
-    return db.getUsers(ids)
+    return db.users.getUsers(ids)
       .bind(this)
       .then(populateUsersDetails)
       .catch(function(ex) {

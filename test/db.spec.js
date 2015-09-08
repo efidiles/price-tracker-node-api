@@ -24,8 +24,8 @@ describe('storage/db.js', function() {
       });
   });
 
-  it('should getAllUsers', function(done) {
-    db.getAllUsers()
+  it('should getAll', function(done) {
+    db.getAll()
       .then(function(users) {
         expect(users.length).to.equal(2);
         done();

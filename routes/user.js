@@ -23,7 +23,7 @@ function login(req, res, next) {
   }
 
   logger.debug('Checking email.');
-  db.getUserByEmail(req.body.email, true)
+  db.getByEmail(req.body.email, true)
     .then(checkPassword)
     .then(updateUserLastLogin)
     .then(setToken)
@@ -89,7 +89,7 @@ function activate(req, res, next) {
     return next();
   }
 
-  db.getUserById(decodedToken.iss)
+  db.users.getById(decodedToken.iss)
     .then(checkUser)
     .then(activateUser)
     .then(function() {
@@ -141,7 +141,7 @@ function register(req, res, next) {
     return next();
   }
 
-  db.getUserByEmail(req.body.email)
+  db.getByEmail(req.body.email)
     .then(checkForDuplicates)
     .then(utilities.encryptPassword)
     .then(createUser)
@@ -173,7 +173,7 @@ function register(req, res, next) {
 
   function createUser(hashedPassword) {
     logger.debug('Creating user.');
-    var user = db.createUser();
+    var user = db.users.create();
     user.email = req.body.email;
     user.password = hashedPassword;
     if (!req.app.locals.emailSender) {

@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var mongoose = Promise.promisifyAll(require('mongoose'));
 var models = require('../models');
 var logger = require('../helpers/logger');
+var users = items = {};
 
 var User = mongoose.model('user', models.user);
 var ItemModel = mongoose.model('item', models.item);
@@ -36,37 +37,17 @@ function disconnect() {
   mongoose.disconnect();
 }
 
-function createUser(data) {
+users.create = function(data) {
   return new User(data);
-}
+};
 
-function getUsers(ids) {
+users.getUsers = function(ids) {
   return User.find({
     _id: {
       $in: ids
     }
   }).execAsync();
-}
-
-function getUserById(id) {
-  return User.findOne({
-    _id: id
-  }).execAsync();
-}
-
-function getUserByEmail(email) {
-  return User.findOne({
-    'email': email
-  })
-    .execAsync();
-}
-
-function getAllUsers() {
-  return User.find()
-    .execAsync();
-}
-
-var users = {};
+};
 
 users.getById = function() {
   return User.findOne({
@@ -74,13 +55,23 @@ users.getById = function() {
   }).execAsync();
 };
 
-var items = {};
+users.getByEmail = function(email) {
+  return User.findOne({
+    'email': email
+  })
+    .execAsync();
+};
+
+users.getAll = function() {
+  return User.find()
+    .execAsync();
+};
 
 items.create = function(data) {
   return new ItemModel(data);
 };
 
-items.removeUser = function(itemId, userId) {
+items.remove = function(itemId, userId) {
   return ItemModel.updateAsync(
     {
       _id: itemId
@@ -128,13 +119,9 @@ items.addUser = function(itemId, userId, maxPrice) {
 
 module.exports = {
   connect: connect,
-  createUser: createUser,
-  getUserById: getUserById,
-  getUsers: getUsers,
-  getUserByEmail: getUserByEmail,
-  getAllUsers: getAllUsers,
-  items: items,
   clear: clear,
   disconnect: disconnect,
+  items: items,
+  users: users,
   ObjectId: mongoose.Types.ObjectId
 };

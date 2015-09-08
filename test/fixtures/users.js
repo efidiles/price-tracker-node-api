@@ -7,7 +7,7 @@ var Promise = require('bluebird');
 
 var users = [
   db.users.create({
-    _id: db.users.ObjectId('000000000000000000000001'),
+    _id: db.ObjectId('000000000000000000000001'),
     email: 'efidiles.public@gmail.com',
     password: 'test',
     activated: true

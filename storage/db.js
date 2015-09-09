@@ -4,7 +4,7 @@ var models = require('../models');
 var logger = require('../helpers/logger');
 var users = items = {};
 
-var User = mongoose.model('user', models.user);
+var UserModel = mongoose.model('user', models.user);
 var ItemModel = mongoose.model('item', models.item);
 
 function connect(url) {
@@ -38,11 +38,11 @@ function disconnect() {
 }
 
 users.create = function(data) {
-  return new User(data);
+  return new UserModel(data);
 };
 
-users.getUsers = function(ids) {
-  return User.find({
+users.getUserModels = function(ids) {
+  return UserModel.find({
     _id: {
       $in: ids
     }
@@ -50,20 +50,20 @@ users.getUsers = function(ids) {
 };
 
 users.getById = function() {
-  return User.findOne({
+  return UserModel.findOne({
     _id: id
   }).execAsync();
 };
 
 users.getByEmail = function(email) {
-  return User.findOne({
+  return UserModel.findOne({
     'email': email
   })
     .execAsync();
 };
 
 users.getAll = function() {
-  return User.find()
+  return UserModel.find()
     .execAsync();
 };
 
@@ -104,7 +104,7 @@ items.getByUrl = function(url) {
   })
     .execAsync();
 };
-items.addUser = function(itemId, userId, maxPrice) {
+items.addUserModel = function(itemId, userId, maxPrice) {
   return ItemModel.updateAsync({
     _id: itemId
   }, {

@@ -1,17 +1,6 @@
 {
   "env": {
-    "node": true
-  },
-  "ecmaFeatures": {
-    "blockBindings": true,
-    "defaultParams": true,
-    "forOf": true,
-    "destructuring": true,
-    "generators": true,
-    "templateStrings": true,
-    "spread": true,
-    "restParams": true,
-    "objectLiteralComputedProperties": true
+    "mocha": true
   },
   "rules": {
     "block-scoped-var": 2,

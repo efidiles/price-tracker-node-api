@@ -20,6 +20,6 @@ let UserSchema = new mongoose.Schema({
   }
 });
 
-UserSchema.virtual('created').get(common.created);
+UserSchema.virtual('created').get(common.virtualMethods.created);
 
 module.exports = UserSchema;

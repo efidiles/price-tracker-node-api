@@ -8,5 +8,7 @@ let created = function() {
 };
 
 module.exports = {
-  created
+  virtualMethods: {
+    created
+  }
 };

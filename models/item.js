@@ -2,6 +2,7 @@
 
 let mongoose = require('mongoose');
 let common = require('./common');
+let _ = require('lodash');
 
 let ItemSchema = new mongoose.Schema({
   url: String,
@@ -10,10 +11,10 @@ let ItemSchema = new mongoose.Schema({
   users: Array
 });
 
-ItemSchema.virtual('created').get(common.created);
+ItemSchema.virtual('created').get(common.virtualMethods.created);
 
-ItemSchema.methods.hasUser = function(userId) {
-  return this.users.indexOf(userId) !== -1;
+ItemSchema.methods.isTrackedByUser = function(userId) {
+  return _.find(item.users, 'id', userId) !== undefined;
 };
 
 module.exports = ItemSchema;

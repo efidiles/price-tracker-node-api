@@ -1,6 +1,5 @@
 'use strict';
 
-let _ = require('lodash');
 let logger = require('../helpers/logger');
 let db = require('../storage/db');
 let validator = require('../helpers/validator');
@@ -30,6 +29,7 @@ function add(req, res, next) {
   }
 
   let selector = validator.escape(req.body.selector);
+  let loggedInUserId = req.FIDI.token.decoded.iss;
 
   db.items.getByUrl(req.body.url)
     .then(function(item) {
@@ -38,7 +38,7 @@ function add(req, res, next) {
         return addUserToExistingItem(item[0]);
       } else {
         logger.debug("Item doesn't exists. Creating new item.");
-        return addNewItem();
+        return createNewItem();
       }
     })
     .then(function() {
@@ -56,32 +56,24 @@ function add(req, res, next) {
     });
 
   function addUserToExistingItem(item) {
-    if (userIsAlreadyTrackingItem()) {
+    if (item.isTrackedByUser(loggedInUserId)) {
       throw {
         name: 'AlreadyTrackingItem',
         message: 'The item is already tracked by the user.'
       };
     }
 
-    function userIsAlreadyTrackingItem() {
-      return _.filter(item.users,
-          {
-            id: req.FIDI.token.decoded.iss
-          }).length > 0;
-    }
-
-    return db.items.addUser(item.id, req.FIDI.token.decoded.iss,
-      req.body.maxPrice);
+    return db.items.addUser(item.id, loggedInUserId, req.body.maxPrice);
   }
 
-  function addNewItem() {
+  function createNewItem() {
     let item = new db.items.create({
       url: req.body.url,
       selector: selector
     });
 
     item.users.push({
-      id: req.FIDI.token.decoded.iss,
+      id: loggedInUserId,
       maxPrice: req.body.maxPrice
     });
 
@@ -126,7 +118,7 @@ function remove(req, res, next) {
         message: 'Item was not found.'
       };
     }
-    if (!item.hasUser(req.FIDI.token.decoded.iss)) {
+    if (!item.isTrackedByUser(req.FIDI.token.decoded.iss)) {
       throw {
         name: 'NotFound',
         message: 'The user is not tracking the item.'

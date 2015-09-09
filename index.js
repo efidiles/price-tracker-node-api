@@ -79,18 +79,10 @@ function makeServer(dependencies) {
   function mountMainRoutes(mainRouter) {
     mainRouter.post(appRoutes.login.relativePath, routes.user.login);
     mainRouter.get(
-      appRoutes.profile.relativePath,
-      routes.checkPermissions,
-      routes.user.profile
-    );
-    mainRouter.get(
       appRoutes.activate.relativePath + '/:token',
       routes.user.activate
     );
-    mainRouter.post(
-      appRoutes.register.relativePath,
-      routes.user.register
-    );
+    mainRouter.post(appRoutes.register.relativePath, routes.user.register);
   }
 
   function mountItemRoutes(itemRouter) {

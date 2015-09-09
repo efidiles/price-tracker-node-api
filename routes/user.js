@@ -191,10 +191,10 @@ function register(req, res, next) {
     }
 
     var emailActivationToken = jwtHelper.generateToken(user.id);
-    return req.app.locals.emailSender.sendActivationEmail({
-      email: user.email,
-      token: emailActivationToken
-    }).then(function() {
+    return req.app.locals.emailSender.sendActivationEmail(
+        user.email,
+        emailActivationToken
+    ).then(function() {
       logger.debug('Activation email sent.');
     });
   }
@@ -246,15 +246,9 @@ function refreshToken(req, res, next) {
   return next();
 }
 
-function profile(req, res, next) {
-  res.FIDI.sendError(500, 'Not implemented yet.', true);
-  next();
-}
-
 module.exports = {
   activate: activate,
   register: register,
   login: login,
-  profile: profile,
   refreshToken: refreshToken
 };

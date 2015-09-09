@@ -9,8 +9,8 @@ let logger = require('./logger').FIDI.forModule(__filename);
 let _ = require('lodash');
 
 /**
- * Decorator for mongoose ItemModel. Given an ItemModel object, this decorator
- * will perform certain async tasks detailed below.
+ * Given an ItemModel object, this service wrapper will perform certain async
+ * tasks detailed below.
  * @param  {object} emailSender an emailSender instance must be injected when
  *                              creating the decorator.
  * @return {Promise}            which gets resolve when all the async operations
@@ -77,7 +77,7 @@ module.exports = function(emailSender) {
    * item to the database.
    * @return {Promise}
    */
-  ItemService.prototype.parseData = function() {
+  ItemService.prototype.parseDataFromUrl = function() {
     if (!this.content) {
       throw new Error('The content is not available.');
     }
@@ -140,23 +140,17 @@ module.exports = function(emailSender) {
     return usersToNotify;
   };
 
-  return function(item, options) {
+  return function(item) {
     let itemService = new ItemService(item);
-    let returnPromise;
 
-    //if content is not then load the content and users info in parallel
-    if (!options || !options.content) {
-      returnPromise = Promise.settle([
-          itemService.loadDataFromUrl(),
-          itemService.loadUsersFullInfo()
-        ]);
-    } else {
-      itemService.content = options.content;
-      returnPromise = itemService.loadUsersFullInfo().bind(itemService);
-    }
+    let urlContentLoader = itemService.loadDataFromUrl()
+      .bind(itemService)
+      .then(itemService.parseDataFromUrl);
 
-    return returnPromise.bind(itemService)
-      .then(itemService.parseData)
+    return Promise.settle([
+        urlContentLoader,
+        itemService.loadUsersFullInfo()
+      ])
       .return(itemService);
   };
 };

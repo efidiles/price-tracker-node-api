@@ -1,3 +1,5 @@
+'use strict';
+
 function setRegistration(user) {
   var key = 'user:' + user.id;
   this.set(key, user);

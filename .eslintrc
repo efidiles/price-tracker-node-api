@@ -14,6 +14,7 @@
     "objectLiteralComputedProperties": true
   },
   "rules": {
+    "strict": [2, "global"],
     "block-scoped-var": 2,
     "brace-style": [2, "1tbs"],
     "camelcase": 1,

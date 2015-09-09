@@ -1,13 +1,15 @@
-var appLogger = require('../helpers/logger');
-var auth = require('http-auth');
-var db = require('../storage/db');
+'use strict';
 
-var checkPermissions = (function checkPermissions() {
-  var basic = auth.basic({
+let appLogger = require('../helpers/logger');
+let auth = require('http-auth');
+let db = require('../storage/db');
+
+let checkPermissions = (function checkPermissions() {
+  let basic = auth.basic({
     realm: process.env.NODE_APP_REALM_DEBUG
   }, function(user, pass, next) {
     appLogger.info('Checking debug user authentication');
-    var isAllowed = user === process.env.NODE_APP_DEBUG_USER &&
+    let isAllowed = user === process.env.NODE_APP_DEBUG_USER &&
       pass === process.env.NODE_APP_DEBUG_PASSWORD &&
       process.env.NODE_ENV === 'development';
     next(isAllowed);
@@ -28,7 +30,7 @@ function exec(req, res, next) {
 }
 
 function redisFlush(req, res, next) {
-  var redis = req.app.locals.redisClient;
+  let redis = req.app.locals.redisClient;
   if (redis) {
     redis.flushall();
     appLogger.debug('redis flushed');

@@ -1,8 +1,10 @@
-var config = require('./config');
-var emailSender = require('nodemailer');
-var Promise = require('bluebird');
-var logger = require('./logger').FIDI.forModule(__filename);
-var senderTransport;
+'use strict';
+
+let config = require('./config');
+let emailSender = require('nodemailer');
+let Promise = require('bluebird');
+let logger = require('./logger').FIDI.forModule(__filename);
+let senderTransport;
 
 /**
  * Sends an activation email. The function will send an email with
@@ -14,10 +16,10 @@ var senderTransport;
 function sendActivationEmail(email, token) {
   logger.debug('Sending activation email.');
 
-  var activationUrl = createActivationLink(token);
+  let activationUrl = createActivationLink(token);
 
   //TODO: make a better template
-  var emailOptions = {
+  let emailOptions = {
     from: process.env.NODE_APP_EMAILSENDER_EMAIL,
     to: email,
     subject: 'Activate your account',
@@ -41,7 +43,7 @@ function sendPriceNotification(email, url, price) {
   logger.debug('Sending price notification email.');
 
   //TODO: make a better template
-  var emailOptions = {
+  let emailOptions = {
     from: process.env.NODE_APP_EMAILSENDER_EMAIL,
     to: email,
     subject: 'Buy your item now',

@@ -1,6 +1,8 @@
-var hostname = process.env.NODE_APP_HOSTNAME || require('os').hostname();
+'use strict';
 
-var appRoutes = {};
+let hostname = process.env.NODE_APP_HOSTNAME || require('os').hostname();
+
+let appRoutes = {};
 
 appRoutes.api = {
   relativePath: '/api',

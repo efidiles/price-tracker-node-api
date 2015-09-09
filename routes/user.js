@@ -1,10 +1,12 @@
-var jwtHelper = require('../helpers/jwt');
-var moment = require('moment');
-var logger = require('../helpers/logger');
-var utilities = require('../helpers/utilities');
-var db = require('../storage/db');
-var validator = require('../helpers/validator');
-var allowedErrors = require('../helpers/error').allowedErrorsFactory([
+'use strict';
+
+let jwtHelper = require('../helpers/jwt');
+let moment = require('moment');
+let logger = require('../helpers/logger');
+let utilities = require('../helpers/utilities');
+let db = require('../storage/db');
+let validator = require('../helpers/validator');
+let allowedErrors = require('../helpers/error').allowedErrorsFactory([
   'NotFound',
   'DuplicateFound'
 ]);
@@ -67,7 +69,7 @@ function login(req, res, next) {
   function setToken(user) {
     logger.debug('Generating the token.');
 
-    var tokenPayload = {
+    let tokenPayload = {
       ll: user.lastLogin,
       lpc: user.lastPasswordChange
     };
@@ -82,7 +84,7 @@ function activate(req, res, next) {
    * The token needs to be decoded here because in the activation process
    * the token is not sent in the Authorisation header but in the query string
    */
-  var decodedToken = jwtHelper.decodeToken(req.params.token);
+  let decodedToken = jwtHelper.decodeToken(req.params.token);
 
   if (!decodedToken) {
     res.FIDI.sendError(500, 'Invalid token.', true);
@@ -99,7 +101,7 @@ function activate(req, res, next) {
     .catch(function(ex) {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
-        var code = 400;
+        let code = 400;
         if (ex.name === 'NotFound') {
           code = 404;
         }
@@ -173,7 +175,7 @@ function register(req, res, next) {
 
   function createUser(hashedPassword) {
     logger.debug('Creating user.');
-    var user = db.users.create();
+    let user = db.users.create();
     user.email = req.body.email;
     user.password = hashedPassword;
     if (!req.app.locals.emailSender) {
@@ -190,7 +192,7 @@ function register(req, res, next) {
       return;
     }
 
-    var emailActivationToken = jwtHelper.generateToken(user.id);
+    let emailActivationToken = jwtHelper.generateToken(user.id);
     return req.app.locals.emailSender.sendActivationEmail(
         user.email,
         emailActivationToken
@@ -208,7 +210,7 @@ function refreshToken(req, res, next) {
     return next();
   }
 
-  var tokenData = req.FIDI.token.decoded;
+  let tokenData = req.FIDI.token.decoded;
 
   if (!tokenData.expired) {
     res.FIDI.sendError(400, "Token hasn't expired yet.", true);
@@ -224,7 +226,7 @@ function refreshToken(req, res, next) {
     return next();
   }
 
-  var newToken = jwtHelper.generateToken(tokenData.iss, {
+  let newToken = jwtHelper.generateToken(tokenData.iss, {
     ll: tokenData.ll,
     lpc: tokenData.lpc
   });
@@ -236,7 +238,7 @@ function refreshToken(req, res, next) {
   });
 
   function lastLoginIsTooOld() {
-    var maxLoginDateInThePast = moment().subtract(
+    let maxLoginDateInThePast = moment().subtract(
       process.env.NODE_APP_TOKEN_LOGIN_VALID_PERIOD,
       'milliseconds'
     );

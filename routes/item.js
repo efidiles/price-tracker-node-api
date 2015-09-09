@@ -1,9 +1,11 @@
-var _ = require('lodash');
-var logger = require('../helpers/logger');
-var db = require('../storage/db');
-var validator = require('../helpers/validator');
-var itemServiceFactory = require('../helpers/item-service');
-var allowedErrors = require('../helpers/error').allowedErrorsFactory([
+'use strict';
+
+let _ = require('lodash');
+let logger = require('../helpers/logger');
+let db = require('../storage/db');
+let validator = require('../helpers/validator');
+let itemServiceFactory = require('../helpers/item-service');
+let allowedErrors = require('../helpers/error').allowedErrorsFactory([
   'AlreadyTrackingItem',
   'NotFound'
 ]);
@@ -27,7 +29,7 @@ function add(req, res, next) {
     return next();
   }
 
-  var selector = validator.escape(req.body.selector);
+  let selector = validator.escape(req.body.selector);
 
   db.items.getByUrl(req.body.url)
     .then(function(item) {
@@ -73,7 +75,7 @@ function add(req, res, next) {
   }
 
   function addNewItem() {
-    var item = new db.items.create({
+    let item = new db.items.create({
       url: req.body.url,
       selector: selector
     });
@@ -105,7 +107,7 @@ function remove(req, res, next) {
     .catch(function(ex) {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
-        var code = 400;
+        let code = 400;
         if (ex.name === 'NotFound') {
           code = 404;
         }

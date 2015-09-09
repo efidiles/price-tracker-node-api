@@ -1,8 +1,10 @@
-var logger = require('./logger');
-var _ = require('lodash');
-var appRoutes = require('./config').appRoutes;
-var expressLimiter = require('express-limiter');
-var config = {
+'use strict';
+
+let logger = require('./logger');
+let _ = require('lodash');
+let appRoutes = require('./config').appRoutes;
+let expressLimiter = require('express-limiter');
+let config = {
   total: 50, //set min 3 because there's a bug in the package
   expire: 1000 * 60 * 60
 };
@@ -16,7 +18,7 @@ module.exports = function(options) {
       return;
     }
 
-    var limiter = expressLimiter(app, redisClient);
+    let limiter = expressLimiter(app, redisClient);
 
     limiter({
       path: appRoutes.register.fullPath,

@@ -1,15 +1,17 @@
-var _ = require('lodash');
-var winston = require('winston');
-var path = require('path');
+'use strict';
 
-var errors = {
+let _ = require('lodash');
+let winston = require('winston');
+let path = require('path');
+
+let errors = {
   tryingToSetNonexistentLevel: 'You are trying to set a nonexistent ' +
     'error level: %s!'
 };
 
-var consoleTransport = new (winston.transports.Console)();
+let consoleTransport = new (winston.transports.Console)();
 
-var logger = new (winston.Logger)({
+let logger = new (winston.Logger)({
   transports: [consoleTransport],
   level: process.env.NODE_APP_ERROR_LEVEL
 });
@@ -32,7 +34,7 @@ function changeLoggingLevel(level) {
 logger.FIDI = {
   changeLevel: changeLoggingLevel,
   forModule: function(filepath) {
-    var filename = path.basename(filepath);
+    let filename = path.basename(filepath);
     return {
       debug: function(message) {
         logger.debug('From ' + filename + ': ' + message);

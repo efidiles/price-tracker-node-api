@@ -1,4 +1,6 @@
-var validator = require('validator');
+'use strict';
+
+let validator = require('validator');
 
 validator.FIDI = validator.FIDI || {};
 validator.FIDI.isStrongPassword = function(str) {
@@ -8,8 +10,8 @@ validator.FIDI.isStrongPassword = function(str) {
 
 
   function hasSpecialCharacters(str) {
-    var iChars = '!@#$%^&*()+=-[]\';,./{}|":<>?~_';
-    for (var i = 0, j = str.length; i < j; i++) {
+    let iChars = '!@#$%^&*()+=-[]\';,./{}|":<>?~_';
+    for (let i = 0, j = str.length; i < j; i++) {
       if (iChars.indexOf(str.charAt(i)) !== -1) {
         return true;
       }

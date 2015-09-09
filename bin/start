@@ -1,8 +1,9 @@
 #!/usr/bin/env node
+'use strict';
 
 require('env2')('config.env');
-var http = require('http');
-var db = require('../storage/db');
+let http = require('http');
+let db = require('../storage/db');
 
 /**
  * Setup database
@@ -12,9 +13,9 @@ db.connect(process.env.NODE_APP_MONGO_URL)
     console.log('Connected to the database.');
 
     setupLoggers();
-    var redisClient = createRedisClient();
-    var requestsLimiter = createRequestsLimiter();
-    var emailSender = createEmailSender();
+    let redisClient = createRedisClient();
+    let requestsLimiter = createRequestsLimiter();
+    let emailSender = createEmailSender();
 
     setupApplication({
       requestsLimiter: requestsLimiter,
@@ -23,7 +24,7 @@ db.connect(process.env.NODE_APP_MONGO_URL)
     });
   })
   .catch(function(ex) {
-    var message = "Can't connect to the database. Details: " + ex.stack;
+    let message = "Can't connect to the database. Details: " + ex.stack;
     console.log(message);
     throw message;
   }
@@ -32,8 +33,8 @@ db.connect(process.env.NODE_APP_MONGO_URL)
 function setupLoggers() {
   console.log('Setting up the logger');
 
-  var logger = require('../helpers/logger');
-  var Graylog = require('winston-graylog2');
+  let logger = require('../helpers/logger');
+  let Graylog = require('winston-graylog2');
 
   logger.add(Graylog, {
     name: 'Graylog',
@@ -54,10 +55,10 @@ function setupLoggers() {
 function createRedisClient() {
   console.log('Setting up Redis.');
 
-  var redis = require('redis');
-  var redisDecorator = require('../storage/redis');
+  let redis = require('redis');
+  let redisDecorator = require('../storage/redis');
 
-  var localRedis = redisDecorator(
+  let localRedis = redisDecorator(
     redis.createClient(
       process.env.NODE_APP_REDIS_PORT,
       process.env.NODE_APP_REDIS_HOST
@@ -74,7 +75,7 @@ function createRedisClient() {
 function createRequestsLimiter() {
   console.log('Setting up the requests limiter.');
 
-  var limiterConfig = require('../helpers/express-limiter');
+  let limiterConfig = require('../helpers/express-limiter');
 
   return limiterConfig({
     total: 50,
@@ -86,7 +87,7 @@ function createRequestsLimiter() {
 function createEmailSender() {
   console.log('Setting up the email sender.');
 
-  var emailSenderConfig = require('../helpers/email-sender');
+  let emailSenderConfig = require('../helpers/email-sender');
   return emailSenderConfig({
     service: 'Gmail',
     auth: {
@@ -99,18 +100,18 @@ function createEmailSender() {
 function setupApplication(dependencies) {
   console.log('Setting up the application');
 
-  app = require('../index')(dependencies);
+  let app = require('../index')(dependencies);
 
-  var port = normalizePort(process.env.NODE_APP_PORT);
+  let port = normalizePort(process.env.NODE_APP_PORT);
   app.set('port', port);
 
-  var server = http.createServer(app);
+  let server = http.createServer(app);
 
   server.listen(port);
   server.on('error', onError);
 
   function normalizePort(val) {
-    var port = parseInt(val, 10);
+    let port = parseInt(val, 10);
 
     if (isNaN(port)) {
       return val;
@@ -128,7 +129,7 @@ function setupApplication(dependencies) {
       throw error;
     }
 
-    var bind = typeof port === 'string'
+    let bind = typeof port === 'string'
       ? 'Pipe ' + port
       : 'Port ' + port;
 

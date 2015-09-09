@@ -1,8 +1,10 @@
-var appLogger = require('../helpers/logger');
-var auth = require('http-auth');
+'use strict';
 
-var checkPermissions = (function checkPermissions() {
-  var basic = auth.basic({
+let appLogger = require('../helpers/logger');
+let auth = require('http-auth');
+
+let checkPermissions = (function checkPermissions() {
+  let basic = auth.basic({
     realm: process.env.NODE_APP_REALM_ADMIN
   }, function(user, pass, next) {
     //TODO: better credentials

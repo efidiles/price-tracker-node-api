@@ -1,10 +1,12 @@
-var Promise = require('bluebird');
-var bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
-var logger = require('./logger').FIDI.forModule(__filename);
+'use strict';
+
+let Promise = require('bluebird');
+let bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
+let logger = require('./logger').FIDI.forModule(__filename);
 
 function getPrice(str) {
-  var onlyDot = str.replace(',', '.');
-  var onlyDigits = onlyDot.replace(/[^\d.]/g, '');
+  let onlyDot = str.replace(',', '.');
+  let onlyDigits = onlyDot.replace(/[^\d.]/g, '');
   return parseFloat(onlyDigits);
 }
 

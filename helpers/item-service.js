@@ -1,10 +1,12 @@
-var Promise = require('bluebird');
-var request = Promise.promisifyAll(require('request'));
-var cheerio = require('cheerio');
-var db = require('../storage/db');
-var utilities = require('./utilities');
-var logger = require('./logger').FIDI.forModule(__filename);
-var _ = require('lodash');
+'use strict';
+
+let Promise = require('bluebird');
+let request = Promise.promisifyAll(require('request'));
+let cheerio = require('cheerio');
+let db = require('../storage/db');
+let utilities = require('./utilities');
+let logger = require('./logger').FIDI.forModule(__filename);
+let _ = require('lodash');
 
 /**
  * Decorator for mongoose ItemModel. Given an ItemModel object, this decorator
@@ -48,7 +50,7 @@ module.exports = function(emailSender) {
    */
   ItemService.prototype.loadUsersFullInfo = function() {
     logger.debug('Loading users full info.');
-    var ids = _.pluck(this.item.users, 'id');
+    let ids = _.pluck(this.item.users, 'id');
 
     return db.users.getUsers(ids)
       .bind(this)
@@ -58,7 +60,7 @@ module.exports = function(emailSender) {
       });
 
     function populateUsersDetails(users) {
-      var _users = {};
+      let _users = {};
       users.forEach(function(user) {
         _users[user.id] = user;
       });
@@ -82,8 +84,8 @@ module.exports = function(emailSender) {
     if (!this.item.selector) {
       throw new Error('The selector is not available.');
     }
-    var $ = cheerio.load(this.content);
-    var contentOfPriceElement = $(this.item.selector).text();
+    let $ = cheerio.load(this.content);
+    let contentOfPriceElement = $(this.item.selector).text();
     this.price = utilities.getPrice(contentOfPriceElement);
 
     this.item.snapshots.push({
@@ -97,7 +99,7 @@ module.exports = function(emailSender) {
   ItemService.prototype.sendEmails = function() {
     logger.debug('Sending emails to users.');
 
-    var self = this,
+    let self = this,
       item = this.item,
       lastSnapshot = item.snapshots[item.snapshots.length - 1],
       usersToNotify = getUsersToNotify();
@@ -118,7 +120,7 @@ module.exports = function(emailSender) {
     }
 
     function mustSendToUser(user, lastSnapshot) {
-      var isRightPrice = lastSnapshot.price <= user.maxPrice,
+      let isRightPrice = lastSnapshot.price <= user.maxPrice,
         isRightDate = false;
 
       if (!user.lastDate) {
@@ -139,8 +141,8 @@ module.exports = function(emailSender) {
   };
 
   return function(item, options) {
-    var itemService = new ItemService(item);
-    var returnPromise;
+    let itemService = new ItemService(item);
+    let returnPromise;
 
     //if content is not then load the content and users info in parallel
     if (!options || !options.content) {

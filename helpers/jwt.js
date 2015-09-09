@@ -1,8 +1,10 @@
-var jwt = require('jsonwebtoken');
-var _ = require('lodash');
-var logger = require('./logger').FIDI.forModule(__filename);
+'use strict';
 
-var tokenDefaults = {
+let jwt = require('jsonwebtoken');
+let _ = require('lodash');
+let logger = require('./logger').FIDI.forModule(__filename);
+
+let tokenDefaults = {
   algorithm: 'HS256',
   expiresInSeconds: parseInt(process.env.NODE_APP_TOKEN_EXPIRES, 10) * 1000
 };
@@ -10,7 +12,7 @@ var tokenDefaults = {
 function generateToken(userId, payload) {
   logger.debug('Generating token.');
 
-  var jwtOptions = _.cloneDeep(tokenDefaults);
+  let jwtOptions = _.cloneDeep(tokenDefaults);
   jwtOptions.issuer = userId;
 
   return jwt.sign(
@@ -27,7 +29,7 @@ function decodeToken(token) {
     });
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
-      var payload = jwt.decode(token);
+      let payload = jwt.decode(token);
       payload.expired = true;
       return payload;
     }
@@ -36,7 +38,7 @@ function decodeToken(token) {
 }
 
 function parseAuthenticationToken(req, res, next) {
-  var authHeader = req.get('Authorization');
+  let authHeader = req.get('Authorization');
 
   if (!authHeader || authHeader.indexOf('Bearer') !== 0) {
     logger.debug('Authorisation header not found. Skipping parsing.');
@@ -58,7 +60,7 @@ function requirePermissions(req, res, next) {
     !req.FIDI.token.decoded ||
     req.FIDI.token.decoded.expired
   ) {
-    var message = 'Not authorised.';
+    let message = 'Not authorised.';
     logger.debug(message);
     res.FIDI.sendError(401, message);
     return next(new Error(message));

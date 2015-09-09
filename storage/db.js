@@ -1,19 +1,22 @@
-var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
-var models = require('../models');
-var logger = require('../helpers/logger');
-var users = items = {};
+'use strict';
 
-var UserModel = mongoose.model('user', models.user);
-var ItemModel = mongoose.model('item', models.item);
+let Promise = require('bluebird');
+let mongoose = Promise.promisifyAll(require('mongoose'));
+let models = require('../models');
+let logger = require('../helpers/logger');
+let users = {};
+let items = {};
+
+let UserModel = mongoose.model('user', models.user);
+let ItemModel = mongoose.model('item', models.item);
 
 function connect(url) {
   return new Promise(function(resolve, reject) {
-    var connectedToDb = false;
+    let connectedToDb = false;
 
     setTimeout(function connectionTimeout() {
       if (!connectedToDb) {
-        var message = "Can't connect to the database";
+        let message = "Can't connect to the database";
         logger.debug(message);
         reject();
       }

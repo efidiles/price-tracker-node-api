@@ -1,6 +1,9 @@
-var mongoose = require('mongoose');
+'use strict';
 
-var UserSchema = new mongoose.Schema({
+let mongoose = require('mongoose');
+let common = require('./common');
+
+let UserSchema = new mongoose.Schema({
   email: String,
   password: String,
   activated: {
@@ -17,6 +20,6 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
-UserSchema.virtual('created').get(created);
+UserSchema.virtual('created').get(common.created);
 
 module.exports = UserSchema;

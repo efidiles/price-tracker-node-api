@@ -1,4 +1,6 @@
-var logger = require('./logger');
+'use strict';
+
+let logger = require('./logger');
 
 module.exports = function responseHelpers(req, res, next) {
   res.FIDI = {
@@ -6,7 +8,7 @@ module.exports = function responseHelpers(req, res, next) {
       if (log) {
         logger.debug(message);
       }
-      var body = {
+      let body = {
         message: message
       };
       res.status(statusCode).json(body);

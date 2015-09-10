@@ -4,6 +4,7 @@ let Promise = require('bluebird');
 let mongoose = Promise.promisifyAll(require('mongoose'));
 let models = require('../models');
 let logger = require('../decorators/logger');
+let _ = require('lodash');
 let users = {};
 let items = {};
 
@@ -44,18 +45,18 @@ users.create = function(data) {
   return new UserModel(data);
 };
 
-users.getUserModels = function(ids) {
-  return UserModel.find({
-    _id: {
-      $in: ids
-    }
-  }).execAsync();
-};
-
-users.getById = function() {
-  return UserModel.findOne({
-    _id: id
-  }).execAsync();
+users.getById = function(ids) {
+  if (_.isArray(ids)) {
+    return UserModel.find({
+      _id: {
+        $in: ids
+      }
+    }).execAsync();
+  } else {
+    return UserModel.findOne({
+      _id: id
+    }).execAsync();
+  }
 };
 
 users.getByEmail = function(email) {

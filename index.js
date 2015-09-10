@@ -12,7 +12,7 @@ let routes = require('./routes');
 let appRoutes = require('./helpers/config').appRoutes;
 
 function makeServer(dependencies) {
-  var app = express();
+  let app = express();
 
   //DI - inject dependencies by extending the app.locals with instances
   //received in the makeServer function
@@ -53,10 +53,10 @@ function makeServer(dependencies) {
   }
 
   function setupRoutes() {
-    var mainRouter = express.Router();
-    var itemRouter = express.Router();
-    var tokenRouter = express.Router();
-    var adminRouter = express.Router();
+    let mainRouter = express.Router();
+    let itemRouter = express.Router();
+    let tokenRouter = express.Router();
+    let adminRouter = express.Router();
 
     app.use(appRoutes.api.relativePath, mainRouter);
     mountMainRoutes(mainRouter);
@@ -121,7 +121,7 @@ function makeServer(dependencies) {
   function mountDebugRoutes() {
     logger.debug('Mounting /debug router');
 
-    var debugRouter = express.Router();
+    let debugRouter = express.Router();
     app.use('/debug', debugRouter);
 
     debugRouter.get(

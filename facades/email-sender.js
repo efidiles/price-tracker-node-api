@@ -1,9 +1,9 @@
 'use strict';
 
-let config = require('./config');
+let config = require('../helpers/config');
 let emailSender = require('nodemailer');
 let Promise = require('bluebird');
-let logger = require('./logger').FIDI.forModule(__filename);
+let logger = require('../decorators/logger').FIDI.forModule(__filename);
 let senderTransport;
 
 /**

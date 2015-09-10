@@ -1,6 +1,6 @@
 'use strict';
 
-let logger = require('./logger');
+let logger = require('../decorators/logger');
 
 module.exports = function responseHelpers(req, res, next) {
   res.FIDI = {

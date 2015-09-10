@@ -2,7 +2,7 @@
 
 let Promise = require('bluebird');
 let bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
-let logger = require('./logger').FIDI.forModule(__filename);
+let logger = require('../decorators/logger').FIDI.forModule(__filename);
 
 function parsePrice(str) {
   let onlyDot = str.replace(',', '.');

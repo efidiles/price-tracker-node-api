@@ -4,8 +4,8 @@ let Promise = require('bluebird');
 let request = Promise.promisifyAll(require('request'));
 let cheerio = require('cheerio');
 let db = require('../storage/db');
-let utilities = require('./utilities');
-let logger = require('./logger').FIDI.forModule(__filename);
+let utilities = require('../helpers/utilities');
+let logger = require('../decorators/logger').FIDI.forModule(__filename);
 let _ = require('lodash');
 let defaults = {
   emailSender: null

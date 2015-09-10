@@ -2,7 +2,7 @@
 
 let jwt = require('jsonwebtoken');
 let _ = require('lodash');
-let logger = require('./logger').FIDI.forModule(__filename);
+let logger = require('../decorators/logger').FIDI.forModule(__filename);
 
 let tokenDefaults = {
   algorithm: 'HS256',

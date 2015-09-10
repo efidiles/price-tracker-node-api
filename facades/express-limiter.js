@@ -1,8 +1,8 @@
 'use strict';
 
-let logger = require('./logger');
+let logger = require('../decorators/logger');
 let _ = require('lodash');
-let appRoutes = require('./config').appRoutes;
+let appRoutes = require('../helpers/config').appRoutes;
 let expressLimiter = require('express-limiter');
 let config = {
   total: 50, //set min 3 because there's a bug in the package

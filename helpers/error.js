@@ -1,6 +1,6 @@
 'use strict';
 
-let logger = require('./logger').FIDI.forModule(__filename);
+let logger = require('../decorators/logger').FIDI.forModule(__filename);
 
 function uncaughtErrorsHandler(err, req, res, next) {
   logger.error('Handle uncaught error.');

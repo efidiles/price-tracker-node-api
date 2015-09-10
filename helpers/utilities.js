@@ -4,7 +4,7 @@ let Promise = require('bluebird');
 let bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
 let logger = require('./logger').FIDI.forModule(__filename);
 
-function getPrice(str) {
+function parsePrice(str) {
   let onlyDot = str.replace(',', '.');
   let onlyDigits = onlyDot.replace(/[^\d.]/g, '');
   return parseFloat(onlyDigits);
@@ -20,7 +20,7 @@ function checkPassword(password, hash) {
 }
 
 module.exports = {
-  getPrice: getPrice,
+  parsePrice: parsePrice,
   encryptPassword: encryptPassword,
   checkPassword: checkPassword
 };

@@ -6,6 +6,7 @@
     "start": "node ./bin/start",
     "test": "istanbul cover node_modules/mocha/bin/_mocha",
     "debug": "node-debug --no-preload --save-live-edit true ./bin/start",
+    "debug-test": "node-debug --no-preload true node_modules/mocha/bin/_mocha",
     "clear-db-test": "node test/utilities/clear-db.js",
     "load-fixtures-test": "node test/utilities/load-fixtures.js"
   },

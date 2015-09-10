@@ -16,6 +16,10 @@
 		{
 			"name": "test current file",
 			"shell_cmd": "taskkill /F /IM node.exe & npm test -- \"${file}\""
+		},
+		{
+			"name": "debug current test file",
+			"shell_cmd": "taskkill /F /IM node.exe & npm run debug-test -- \"${file}\""
 		}
 	],
 	"folders":

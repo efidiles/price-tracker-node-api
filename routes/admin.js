@@ -1,6 +1,6 @@
 'use strict';
 
-let appLogger = require('../helpers/logger');
+let appLogger = require('../decorators/logger');
 let auth = require('http-auth');
 
 let checkPermissions = (function checkPermissions() {

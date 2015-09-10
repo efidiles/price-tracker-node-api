@@ -7,16 +7,39 @@ let db = require('../storage/db');
 let utilities = require('./utilities');
 let logger = require('./logger').FIDI.forModule(__filename);
 let _ = require('lodash');
+let defaults = {
+  emailSender: null
+};
 
 /**
  * Given an ItemModel object, this service wrapper will perform certain async
  * tasks detailed below.
- * @param  {object} emailSender an emailSender instance must be injected when
- *                              creating the decorator.
- * @return {Promise}            which gets resolve when all the async operations
- *                              are completed.
+ * @param  {object} dependencies  expected values are listed below:
+ * {
+ *   emailSender: {
+ *     instance: emailSenderInstance,
+ *     default: false
+ *   }
+ * }
+ * Where 'default' specifies if the instance should server as the default value
+ * when an empty value is passed.
+ * @return {Promise}              which gets resolve when all the async
+ *                                operations are completed.
  */
-module.exports = function(emailSender) {
+module.exports = function(dependencies) {
+  dependencies = _.assign({
+    emailSender: {
+      instance: null,
+      default: false
+    }
+  }, dependencies);
+
+  if (dependencies.emailSender.instance && dependencies.emailSender.default) {
+    defaults.emailSender = dependencies.emailSender.instance;
+  }
+
+  let emailSender = dependencies.emailSender.instance || defaults.emailSender;
+
   if (!emailSender) {
     throw new Error('An email sender instance is required.');
   }
@@ -27,8 +50,8 @@ module.exports = function(emailSender) {
   }
 
   /**
-   * Given an ItemModel, this method will fetch the content from the url in the
-   * url property.
+   * Given an ItemModel, this method will fetch the content from the url found
+   * in its url property.
    * @return {Promise}
    */
   ItemService.prototype.loadDataFromUrl = function() {
@@ -45,14 +68,14 @@ module.exports = function(emailSender) {
 
   /**
    * Given an ItemModel, this method will fetch and populate all the user
-   * details for users in the users property of the ItemModel object.
+   * details for all users in its users property.
    * @return {[type]} [description]
    */
   ItemService.prototype.loadUsersFullInfo = function() {
     logger.debug('Loading users full info.');
     let ids = _.pluck(this.item.users, 'id');
 
-    return db.users.getUsers(ids)
+    return db.users.getById(ids)
       .bind(this)
       .then(populateUsersDetails)
       .catch(function(ex) {
@@ -60,12 +83,12 @@ module.exports = function(emailSender) {
       });
 
     function populateUsersDetails(users) {
-      let _users = {};
+      let usersMap = new Map();
       users.forEach(function(user) {
-        _users[user.id] = user;
+        usersMap.set(user.id, user);
       });
       this.item.users.forEach(function(user) {
-        user.email = _users[user.id].email;
+        user.email = usersMap.get(user.id).email;
       });
     }
   };
@@ -86,7 +109,7 @@ module.exports = function(emailSender) {
     }
     let $ = cheerio.load(this.content);
     let contentOfPriceElement = $(this.item.selector).text();
-    this.price = utilities.getPrice(contentOfPriceElement);
+    this.price = utilities.parsePrice(contentOfPriceElement);
 
     this.item.snapshots.push({
       date: Date(),

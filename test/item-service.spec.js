@@ -4,7 +4,7 @@ var http = require('http');
 var emailServiceMock = {
   sendPriceNotification: function() {}
 };
-var itemServiceFactory = require('../helpers/item-service')(emailServiceMock);
+var itemServiceConfig = require('../services/item-service');
 var db = require('../storage/db');
 var sinon = require('sinon');
 var express = require('express');

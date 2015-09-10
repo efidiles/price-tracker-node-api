@@ -33,7 +33,7 @@ db.connect(process.env.NODE_APP_MONGO_URL)
 function setupLoggers() {
   console.log('Setting up the logger');
 
-  let logger = require('../helpers/logger');
+  let logger = require('../decorators/logger');
   let Graylog = require('winston-graylog2');
 
   logger.add(Graylog, {
@@ -75,7 +75,7 @@ function createRedisClient() {
 function createRequestsLimiter() {
   console.log('Setting up the requests limiter.');
 
-  let limiterConfig = require('../helpers/express-limiter');
+  let limiterConfig = require('../facades/express-limiter');
 
   return limiterConfig({
     total: 50,
@@ -87,7 +87,7 @@ function createRequestsLimiter() {
 function createEmailSender() {
   console.log('Setting up the email sender.');
 
-  let emailSenderConfig = require('../helpers/email-sender');
+  let emailSenderConfig = require('../facades/email-sender');
   return emailSenderConfig({
     service: 'Gmail',
     auth: {

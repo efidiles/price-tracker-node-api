@@ -3,7 +3,7 @@
 let Promise = require('bluebird');
 let mongoose = Promise.promisifyAll(require('mongoose'));
 let models = require('../models');
-let logger = require('../helpers/logger');
+let logger = require('../decorators/logger');
 let users = {};
 let items = {};
 

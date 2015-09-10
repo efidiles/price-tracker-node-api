@@ -2,7 +2,7 @@ require('env2')('config.env');
 var should = require('should');
 var request = require('supertest');
 var Promise = require('bluebird');
-var emailSender = require('../helpers/email-sender');
+var emailSender = require('../facades/email-sender');
 var db = require('../storage/db');
 var sinon = require('sinon');
 process.env.NODE_APP_MONGO_TIMEOUT = 1.5;
@@ -114,7 +114,7 @@ describe('/api/register', function() {
     function(done) {
       var redis = require('redis');
       var localRedis = require('../storage/redis');
-      var limiter = require('../helpers/express-limiter');
+      var limiter = require('../facades/express-limiter');
       localRedis.client = redis.createClient(
         process.env.NODE_TEST_APP_REDIS_PORT,
         process.env.NODE_TEST_APP_REDIS_HOST

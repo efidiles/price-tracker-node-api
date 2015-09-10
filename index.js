@@ -1,13 +1,15 @@
-var express = require('express');
-var compress = require('compression');
-var bodyParser = require('body-parser');
-var _ = require('lodash');
-var logger = require('./helpers/logger');
-var responseHelpers = require('./helpers/response');
-var errorHelpers = require('./helpers/error');
-var jwtHelpers = require('./helpers/jwt');
-var routes = require('./routes');
-var appRoutes = require('./helpers/config').appRoutes;
+'use strict';
+
+let express = require('express');
+let compress = require('compression');
+let bodyParser = require('body-parser');
+let _ = require('lodash');
+let logger = require('./decorators/logger');
+let responseHelpers = require('./helpers/response');
+let errorHelpers = require('./helpers/error');
+let jwtHelpers = require('./facades/jwt');
+let routes = require('./routes');
+let appRoutes = require('./helpers/config').appRoutes;
 
 function makeServer(dependencies) {
   var app = express();

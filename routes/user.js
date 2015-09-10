@@ -1,11 +1,11 @@
 'use strict';
 
-let jwtHelper = require('../helpers/jwt');
+let jwtHelper = require('../facades/jwt');
 let moment = require('moment');
-let logger = require('../helpers/logger');
+let logger = require('../decorators/logger');
 let utilities = require('../helpers/utilities');
 let db = require('../storage/db');
-let validator = require('../helpers/validator');
+let validator = require('../decorators/validator');
 let allowedErrors = require('../helpers/error').allowedErrorsFactory([
   'NotFound',
   'DuplicateFound'

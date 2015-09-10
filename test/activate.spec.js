@@ -4,7 +4,7 @@ var request = require('supertest');
 var Promise = require('bluebird');
 var sinon = require('sinon');
 var db = require('../storage/db');
-var emailSender = require('../helpers/email-sender')();
+var emailSender = require('../facades/email-sender')();
 process.env.NODE_APP_MONGO_TIMEOUT = 1;
 
 describe('/api/activate', function() {
@@ -48,7 +48,7 @@ describe('/api/activate', function() {
     var httpMocks = require('node-mocks-http');
     var req = httpMocks.createRequest();
     var res = httpMocks.createResponse();
-    var jwt = require('../helpers/jwt');
+    var jwt = require('../facades/jwt');
     var registerRouteHandler = require('../routes/user').register;
     var user = {
       email: 'marktaylor@example.org',

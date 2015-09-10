@@ -1,9 +1,9 @@
 'use strict';
 
-let logger = require('../helpers/logger');
+let logger = require('../decorators/logger');
 let db = require('../storage/db');
-let validator = require('../helpers/validator');
-let itemServiceFactory = require('../helpers/item-service');
+let validator = require('../decorators/validator');
+let itemServiceFactory = require('../services/item-service');
 let allowedErrors = require('../helpers/error').allowedErrorsFactory([
   'AlreadyTrackingItem',
   'NotFound'

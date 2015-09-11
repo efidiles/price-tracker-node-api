@@ -26,11 +26,11 @@ Docker, JWT tokens, React, NodeJS, Graylog, MongoDB, npm, Redis, middlewares, de
 
 ##A few implementation details
 
-- JWT tokens are used for authentification and permissions
-- Mocha/Istanbul/Chai(expect) for testing/code coverage/assertions
-- Bcrypt to encrypt sensitive data before storing in database
-- Implementation make heavy use of promises using bluebird library
+- JWT tokens are used for authentification and permissions.
+- Mocha/Istanbul/Chai(expect) for testing/code coverage/assertions.
+- Bcrypt to encrypt sensitive data before storing in the database.
+- The implementation makes heavy use of promises using bluebird library.
 
-All the environment variables used by the app are specified in the `config.env.sample` file. This file should be renamed/duplicated to `config.env` and the application will default to the values in this file if the variables are not present in system's environment variables.
+All the environment variables used by the app are specified in the `config.env.sample` file. This file should be renamed/duplicated to `config.env` and the application will default to the values in this file if the variables are not already present in system's environment variables.
 
 licensed under [The MIT License](http://www.opensource.org/licenses/mit-license.php).

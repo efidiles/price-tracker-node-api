@@ -38,7 +38,7 @@ function setupDIContainer() {
     }
   });
 
-  application.injectDependency({
+  application.injectDependencies({
     requestsLimiter,
     emailSender,
     redisClient

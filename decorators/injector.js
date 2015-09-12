@@ -12,7 +12,7 @@ module.exports = function(decoratedFunction) {
     return decoratedFunction.apply(null, argumentsToPass);
   }
 
-  returnFunction.injectDependency = function(dependencies) {
+  returnFunction.injectDependencies = function(dependencies) {
     moduleDependencies = dependencies;
   };
 

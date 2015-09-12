@@ -55,7 +55,7 @@ describe('itemService', function() {
     });
 
     beforeEach(function() {
-      itemService.injectDependency({
+      itemService.injectDependencies({
         emailSender: emailServiceMock
       });
     });
@@ -240,7 +240,7 @@ describe('itemService', function() {
   });
 
   it('should throw an error if dependencies are not available', function() {
-    itemService.injectDependency({});
+    itemService.injectDependencies({});
     expect(itemService.bind(null)).to.throw(
       /email sender instance is required/
     );
@@ -248,7 +248,7 @@ describe('itemService', function() {
 
   it("should throw error if the item doesn't have a url set",
     function () {
-      itemService.injectDependency({
+      itemService.injectDependencies({
         emailSender: emailServiceMock
       });
       var item = thisTest.mockItem();
@@ -258,7 +258,7 @@ describe('itemService', function() {
 
   it('should throw error if content could not be fetched from url',
     function () {
-      itemService.injectDependency({
+      itemService.injectDependencies({
         emailSender: emailServiceMock
       });
 
@@ -283,7 +283,7 @@ describe('itemService', function() {
 
   it('should throw an error if the item does not have a selector',
     function () {
-      itemService.injectDependency({
+      itemService.injectDependencies({
         emailSender: emailServiceMock
       });
 

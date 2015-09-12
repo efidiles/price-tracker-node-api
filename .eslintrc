@@ -11,6 +11,7 @@
     "templateStrings": true,
     "spread": true,
     "restParams": true,
+    "arrowFunctions": true,
     "objectLiteralComputedProperties": true
   },
   "rules": {

@@ -1,6 +1,7 @@
 'use strict';
 
 let mongoose = require('mongoose');
+let moment = require('moment');
 let common = require('./common');
 
 let UserSchema = new mongoose.Schema({
@@ -12,11 +13,11 @@ let UserSchema = new mongoose.Schema({
   },
   lastLogin: {
     type: Date,
-    default: Date.now
+    default: moment()
   },
   lastPasswordChange: {
     type: Date,
-    default: Date.now
+    default: moment()
   }
 });
 

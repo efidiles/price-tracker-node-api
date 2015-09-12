@@ -108,14 +108,16 @@ items.getByUrl = function(url) {
   })
     .execAsync();
 };
-items.addUserModel = function(itemId, userId, maxPrice) {
+items.addUser = function(itemId, userId, maxPrice) {
   return ItemModel.updateAsync({
     _id: itemId
   }, {
     $push: {
       users: {
         id: userId,
-        maxPrice: maxPrice
+        maxPrice: maxPrice,
+        lastSend: null,
+        emailsSent: 0
       }
     }
   });

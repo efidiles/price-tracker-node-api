@@ -14,7 +14,7 @@ let ItemSchema = new mongoose.Schema({
 ItemSchema.virtual('created').get(common.virtualMethods.created);
 
 ItemSchema.methods.isTrackedByUser = function(userId) {
-  return _.find(item.users, 'id', userId) !== undefined;
+  return _.find(this.users, 'id', userId) !== undefined;
 };
 
 module.exports = ItemSchema;

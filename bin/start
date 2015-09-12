@@ -4,34 +4,49 @@
 require('env2')('config.env');
 let http = require('http');
 let db = require('../storage/db');
+let itemServiceConfig = require('../services/item-service');
+let application = require('../index');
 
 /**
  * Setup database
  */
 db.connect(process.env.NODE_APP_MONGO_URL)
   .then(function() {
-    console.log('Connected to the database.');
+    console.info('Connected to the database.');
 
     setupLoggers();
-    let redisClient = createRedisClient();
-    let requestsLimiter = createRequestsLimiter();
-    let emailSender = createEmailSender();
-
-    setupApplication({
-      requestsLimiter: requestsLimiter,
-      emailSender: emailSender,
-      redisClient: redisClient
-    });
+    setupDIContainer();
+    startApplication();
   })
-  .catch(function(ex) {
+  .catch(ex => {
     let message = "Can't connect to the database. Details: " + ex.stack;
-    console.log(message);
     throw message;
   }
 );
 
+function setupDIContainer() {
+  console.info('Injecting dependencies.');
+
+  let redisClient = createRedisClient();
+  let requestsLimiter = createRequestsLimiter();
+  let emailSender = createEmailSender();
+
+  itemServiceConfig({
+    emailSender: {
+      instance: emailSender,
+      default: true
+    }
+  });
+
+  application.injectDependency({
+    requestsLimiter,
+    emailSender,
+    redisClient
+  });
+}
+
 function setupLoggers() {
-  console.log('Setting up the logger');
+  console.info('Setting up the logger');
 
   let logger = require('../decorators/logger');
   let Graylog = require('winston-graylog2');
@@ -53,7 +68,7 @@ function setupLoggers() {
 }
 
 function createRedisClient() {
-  console.log('Setting up Redis.');
+  console.info('Setting up Redis.');
 
   let redis = require('redis');
   let redisDecorator = require('../storage/redis');
@@ -66,14 +81,14 @@ function createRedisClient() {
   );
 
   localRedis.on('error', function(err) {
-    console.log("Can't connect to Redis. Details:  " + err);
+    console.info("Can't connect to Redis. Details:  " + err);
   });
 
   return localRedis;
 }
 
 function createRequestsLimiter() {
-  console.log('Setting up the requests limiter.');
+  console.info('Setting up the requests limiter.');
 
   let limiterConfig = require('../facades/express-limiter');
 
@@ -85,7 +100,7 @@ function createRequestsLimiter() {
 }
 
 function createEmailSender() {
-  console.log('Setting up the email sender.');
+  console.info('Setting up the email sender.');
 
   let emailSenderConfig = require('../facades/email-sender');
   return emailSenderConfig({
@@ -97,15 +112,14 @@ function createEmailSender() {
   });
 }
 
-function setupApplication(dependencies) {
-  console.log('Setting up the application');
+function startApplication() {
+  console.info('Setting up the application');
 
-  let app = require('../index')(dependencies);
-
+  var expressInstance = application('lll');
   let port = normalizePort(process.env.NODE_APP_PORT);
-  app.set('port', port);
+  expressInstance.set('port', port);
 
-  let server = http.createServer(app);
+  let server = http.createServer(expressInstance);
 
   server.listen(port);
   server.on('error', onError);

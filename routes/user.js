@@ -36,7 +36,7 @@ function login(req, res, next) {
       });
       return next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
         res.FIDI.sendError(400, ex.message, true);
@@ -62,7 +62,7 @@ function login(req, res, next) {
 
   function updateUserLastLogin(user) {
     logger.debug("Updating user's last login date.");
-    user.lastLogin = Date();
+    user.lastLogin = moment();
     return user.saveAsync().get(0);
   }
 
@@ -98,7 +98,7 @@ function activate(req, res, next) {
       res.FIDI.sendSuccess('User is now active.', true);
       next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
         let code = 400;
@@ -152,7 +152,7 @@ function register(req, res, next) {
       res.FIDI.sendSuccess('User has been registered.', true);
       next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
         res.FIDI.sendError(400, ex.message, true);

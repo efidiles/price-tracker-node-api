@@ -3,7 +3,6 @@
 let logger = require('../decorators/logger');
 let db = require('../storage/db');
 let validator = require('../decorators/validator');
-let itemServiceFactory = require('../services/item-service');
 let allowedErrors = require('../helpers/error').allowedErrorsFactory([
   'AlreadyTrackingItem',
   'NotFound'
@@ -45,7 +44,7 @@ function add(req, res, next) {
       res.FIDI.sendSuccess('Item added.', true);
       return next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
         res.FIDI.sendError(400, ex.message, true);
@@ -96,7 +95,7 @@ function remove(req, res, next) {
       res.FIDI.sendSuccess('Item was removed.', true);
       return next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       if (ex.name && allowedErrors.isAllowedToReport(ex.name)) {
         let code = 400;
@@ -129,16 +128,18 @@ function remove(req, res, next) {
 }
 
 function check(req, res, next) {
+  let itemServiceFactory = require('../services/item-service')();
   db.items.getAll()
     .map(itemServiceFactory)
     .each(function(itemService) {
+      console.log(itemService)
       itemService.sendEmails();
     })
     .then(function() {
       res.FIDI.sendSuccess('Checking is completed.', true);
       return next();
     })
-    .catch(function(ex) {
+    .catch(ex => {
       logger.debug(ex);
       res.FIDI.sendError(500, 'Operational error occurred.', true);
       return next();

@@ -39,6 +39,7 @@
     "chai": "^3.2.0",
     "istanbul": "^0.3.18",
     "mocha": "^2.2.5",
+    "nock": "^2.10.0",
     "node-mocks-http": "^1.4.3",
     "nodemon": "^1.4.1",
     "sinon": "^1.16.1",

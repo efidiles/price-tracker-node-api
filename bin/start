@@ -115,7 +115,7 @@ function createEmailSender() {
 function startApplication() {
   console.info('Setting up the application');
 
-  var expressInstance = application('lll');
+  var expressInstance = application();
   let port = normalizePort(process.env.NODE_APP_PORT);
   expressInstance.set('port', port);
 
